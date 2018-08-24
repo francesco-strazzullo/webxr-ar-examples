@@ -1,5 +1,5 @@
-const MODEL_OBJ_URL = '../assets/Coffee.obj'
-const MODEL_MTL_URL = '../assets/Coffee.mtl'
+const MODEL_OBJ_URL = '/assets/Coffee.obj'
+const MODEL_MTL_URL = '/assets/Coffee.mtl'
 const MODEL_SCALE = 0.001
 
 const opacityRemap = mat => {
