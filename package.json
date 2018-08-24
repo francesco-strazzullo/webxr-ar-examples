@@ -1,0 +1,27 @@
+{
+  "name": "webxr-ar-examples",
+  "version": "0.0.1",
+  "description": "WebXR examples",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francesco-strazzullo/webxr-ar-examples.git"
+  },
+  "keywords": [
+    "WebXR",
+    "AR"
+  ],
+  "author": "Francesco Strazzullo (francesco.strazzullo86@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/francesco-strazzullo/webxr-ar-examples/issues"
+  },
+  "homepage": "https://github.com/francesco-strazzullo/webxr-ar-examples#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}
