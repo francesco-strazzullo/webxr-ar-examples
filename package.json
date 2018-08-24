@@ -4,6 +4,7 @@
   "description": "WebXR examples",
   "main": "index.js",
   "scripts": {
+    "build": "sh build.sh",
     "test": "npm test",
     "start": "http-server",
     "precommit": "lint-staged"
