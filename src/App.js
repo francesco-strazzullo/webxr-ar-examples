@@ -1,5 +1,5 @@
 import * as THREE from '//cdnjs.cloudflare.com/ajax/libs/three.js/95/three.module.js'
-
+import Element from './Element.js'
 export default class App {
   constructor () {
     this.onXRFrame = this.onXRFrame.bind(this)
@@ -69,13 +69,17 @@ export default class App {
     this.camera = new THREE.PerspectiveCamera()
     this.camera.matrixAutoUpdate = false
 
+    this.element = new Element(this.session, this.camera)
+    this.scene.add(this.element)
+
     this.frameOfRef = await this.session.requestFrameOfReference('eye-level')
     this.session.requestAnimationFrame(this.onXRFrame)
   }
 
   onXRFrame (time, frame) {
-    let session = frame.session
-    let pose = frame.getDevicePose(this.frameOfRef)
+    const session = frame.session
+    const pose = frame.getDevicePose(this.frameOfRef)
+    this.element.update(this.frameOfRef)
 
     session.requestAnimationFrame(this.onXRFrame)
 
