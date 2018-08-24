@@ -1,5 +1,20 @@
-import * as THREE from '//cdnjs.cloudflare.com/ajax/libs/three.js/95/three.module.js'
 import Element from './Element.js'
+
+const fixFramebuffer = (app) => {
+  THREE.Object3D.prototype.onBeforeRender = () => {
+    app.gl.bindFramebuffer(app.gl.FRAMEBUFFER, app.session.baseLayer.framebuffer)
+  }
+}
+
+const createSceneWithLight = () => {
+  const scene = new THREE.Scene()
+
+  const light = new THREE.AmbientLight(0xffffff, 1)
+  scene.add(light)
+
+  return scene
+}
+
 export default class App {
   constructor () {
     this.onXRFrame = this.onXRFrame.bind(this)
@@ -52,6 +67,8 @@ export default class App {
   async onSessionStarted (session) {
     this.session = session
 
+    fixFramebuffer(this)
+
     this.renderer = new THREE.WebGLRenderer({
       alpha: true,
       preserveDrawingBuffer: true
@@ -64,7 +81,7 @@ export default class App {
 
     this.session.baseLayer = new XRWebGLLayer(this.session, this.gl)
 
-    this.scene = new THREE.Scene()
+    this.scene = createSceneWithLight()
 
     this.camera = new THREE.PerspectiveCamera()
     this.camera.matrixAutoUpdate = false
