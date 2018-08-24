@@ -1,4 +1,41 @@
-import * as THREE from '//cdnjs.cloudflare.com/ajax/libs/three.js/95/three.module.js'
+const MODEL_OBJ_URL = '../assets/Coffee.obj'
+const MODEL_MTL_URL = '../assets/Coffee.mtl'
+const MODEL_SCALE = 0.001
+
+const opacityRemap = mat => {
+  if (mat.opacity === 0) {
+    mat.opacity = 1
+  }
+}
+
+const loadModel = async (objURL, mtlURL) => {
+  const objLoader = new THREE.OBJLoader()
+  const mtlLoader = new THREE.MTLLoader()
+
+  mtlLoader.setTexturePath(mtlURL.substr(0, mtlURL.lastIndexOf('/') + 1))
+  mtlLoader.setMaterialOptions({ ignoreZeroRGBs: true })
+
+  return new Promise((resolve, reject) => {
+    mtlLoader.load(mtlURL, materialCreator => {
+      // We have our material package parsed from the .mtl file.
+      // Be sure to preload it.
+      materialCreator.preload()
+
+      // Remap opacity values in the material to 1 if they're set as
+      // 0; this is another peculiarity of Poly models and some
+      // MTL materials.
+      for (let material of Object.values(materialCreator.materials)) {
+        opacityRemap(material)
+      }
+
+      // Give our OBJ loader our materials to apply it properly to the model
+      objLoader.setMaterials(materialCreator)
+
+      // Finally load our OBJ, and resolve the promise once found.
+      objLoader.load(objURL, resolve, function () {}, reject)
+    }, function () {}, reject)
+  })
+}
 
 const lookAtOnY = (looker, target) => {
   const targetPos = new THREE.Vector3().setFromMatrixPosition(target.matrixWorld)
@@ -8,12 +45,6 @@ const lookAtOnY = (looker, target) => {
     targetPos.z - looker.position.z)
 
   looker.rotation.set(0, angle, 0)
-}
-
-const createCube = () => {
-  const geometry = new THREE.BoxBufferGeometry(0.05, 0.05, 0.05)
-  const material = new THREE.MeshNormalMaterial()
-  return new THREE.Mesh(geometry, material)
 }
 
 const createRing = () => {
@@ -40,10 +71,14 @@ export default class Reticle extends THREE.Object3D {
     super()
 
     this.ring = createRing()
-    this.cube = createCube()
+
+    loadModel(MODEL_OBJ_URL, MODEL_MTL_URL).then(model => {
+      this.model = model
+      this.model.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE)
+      this.add(this.model)
+    })
 
     this.add(this.ring)
-    this.add(this.cube)
 
     this.session = xrSession
     this.visible = false
@@ -58,14 +93,15 @@ export default class Reticle extends THREE.Object3D {
 
     const hit = await getHit(frameOfRef, this.session, ray)
 
-    this.visible = !!hit
-
-    if (this.visible) {
+    if (hit) {
+      this.visible = true
       const hitMatrix = new THREE.Matrix4().fromArray(hit.hitMatrix)
       this.position.setFromMatrixPosition(hitMatrix)
       lookAtOnY(this, this.camera)
 
-      this.cube.rotation.y = this.cube.rotation.y + 0.01
+      if (this.model) {
+        this.model.rotation.y = this.model.rotation.y + 0.01
+      }
     }
   }
 }

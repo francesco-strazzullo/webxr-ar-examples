@@ -11,3 +11,7 @@ WebXR Examples
 ## Demo
 
 You can find a live demo [here](https://francesco-strazzullo.github.io/webxr-ar-examples/)
+
+## Credits
+
+3D Model by [Aryan Sethi](https://poly.google.com/user/f75vV7lkycj)

@@ -31,8 +31,12 @@
   },
   "standard": {
     "globals": [
+      "THREE",
       "XRSession",
       "XRWebGLLayer"
+    ],
+    "ignore": [
+      "/src/loaders"
     ]
   },
   "lint-staged": {

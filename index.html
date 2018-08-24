@@ -2,6 +2,9 @@
 
 <head>
     <title>WebXR examples</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.min.js"></script>
+    <script src="src/loaders/OBJLoader.js"></script>
+    <script src="src/loaders/MTLLoader.js"></script>
     <script src="src/index.js" type="module"></script>
     <style>
         body {
@@ -22,6 +25,13 @@
             height: 100%;
             width: 100%;
         }
+
+        #info {
+            position: fixed;
+            bottom:0;
+            right: 0;
+            color: white;
+        }
     </style>
 </head>
 
@@ -29,6 +39,13 @@
     <button id="enter-ar">
         Start augmented reality
     </button>
+    <div id="info">
+        <span>
+            <a href="https://poly.google.com/view/6yWFiPFl4j0">Model</a> by
+            <a href="https://poly.google.com/user/f75vV7lkycj">Aryan Sethi</a>
+            <a href="https://creativecommons.org/licenses/by/2.0/">CC-BY</a>
+        </span><br />
+    </div>
 </body>
 
 </html>
